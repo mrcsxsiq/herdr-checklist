@@ -20,8 +20,8 @@ Precisa do app desktop do Herdr (testado na 0.1.11). Sem dependências.
 
 ```sh
 # Clone onde você guarda seus projetos: o link simbólico abaixo aponta para esta pasta.
-git clone https://github.com/mrcsxsiq/herdr-tasks-mod.git
-cd herdr-tasks-mod
+git clone https://github.com/mrcsxsiq/herdr-checklist.git
+cd herdr-checklist
 
 # A home do Herdr é ~/.config/herdr-app, a não ser que você defina HERDR_APP_HOME.
 HERDR_HOME="${HERDR_APP_HOME:-$HOME/.config/herdr-app}"

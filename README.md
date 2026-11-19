@@ -20,8 +20,8 @@ You need the Herdr desktop app (tested on 0.1.11). There are no dependencies.
 
 ```sh
 # Clone it wherever you keep your projects: the symlink below points at this folder.
-git clone https://github.com/mrcsxsiq/herdr-tasks-mod.git
-cd herdr-tasks-mod
+git clone https://github.com/mrcsxsiq/herdr-checklist.git
+cd herdr-checklist
 
 # Herdr's home is ~/.config/herdr-app unless you set HERDR_APP_HOME.
 HERDR_HOME="${HERDR_APP_HOME:-$HOME/.config/herdr-app}"
