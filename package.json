@@ -1,0 +1,9 @@
+{
+  "name": "herdr-tasks-mod",
+  "private": true,
+  "type": "module",
+  "description": "A checklist of activities for the Herdr desktop app.",
+  "scripts": {
+    "test": "node --test"
+  }
+}

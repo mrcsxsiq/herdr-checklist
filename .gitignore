@@ -1,0 +1,6 @@
+.DS_Store
+node_modules/
+
+# Herdr writes these type files into every mod folder (here through the symlink)
+mods/*/*.d.ts
+mods/*/jsconfig.json
