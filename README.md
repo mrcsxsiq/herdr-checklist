@@ -33,6 +33,12 @@ herdr-app check "$HERDR_HOME/mods/checklist"
 
 Don't move or delete the cloned folder afterwards, or the link breaks. The symlink means a `git pull` updates the mod, and saving a file reloads it at once. The mod uses no image files, so the symlink is safe (Herdr does not load images from a symlinked folder).
 
+Would you rather not use a link? Copy the folder instead of running the `ln -s` line. After a `git pull`, copy it again to update:
+
+```sh
+cp -R mods/checklist "$HERDR_HOME/mods/"
+```
+
 Then add two blocks to your layout (`layouts/<yours>.json` in Herdr's home, `~/.config/herdr-app` by default). The panel goes in the side panel stack, with Files and Changes:
 
 ```json

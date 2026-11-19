@@ -33,6 +33,12 @@ herdr-app check "$HERDR_HOME/mods/checklist"
 
 Não mova nem apague a pasta clonada depois, ou o link quebra. O link simbólico faz um `git pull` atualizar o mod, e salvar um arquivo recarrega o mod na hora. O mod não usa imagens, então o link é seguro (o Herdr não carrega imagens de uma pasta com link).
 
+Prefere não usar link? Copie a pasta no lugar da linha `ln -s`. Depois de um `git pull`, copie de novo para atualizar:
+
+```sh
+cp -R mods/checklist "$HERDR_HOME/mods/"
+```
+
 Depois ponha dois blocos no seu layout (`layouts/<o seu>.json` na home do Herdr, `~/.config/herdr-app` por padrão). O painel entra na pilha lateral, junto com Files e Changes:
 
 ```json
