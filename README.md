@@ -98,3 +98,7 @@ The data rules and the writing have automated tests. The interface was checked i
 ## Left out for now
 
 Editing an activity's text, reordering, due dates, and a keyboard shortcut to open the panel.
+
+## License
+
+MIT, see [LICENSE](LICENSE).

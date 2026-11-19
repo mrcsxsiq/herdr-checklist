@@ -98,3 +98,7 @@ As regras de dados e a gravação têm testes automáticos. A interface foi conf
 ## Ficou de fora
 
 Editar o texto de uma atividade, reordenar, prazo, e um atalho de teclado para abrir o painel.
+
+## Licença
+
+MIT, veja [LICENSE](LICENSE).
