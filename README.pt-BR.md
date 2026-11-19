@@ -19,14 +19,21 @@ Um checklist de atividades para o app desktop do [Herdr](https://herdr.dev). Um 
 Precisa do app desktop do Herdr (testado na 0.1.11). Sem dependências.
 
 ```sh
-git clone https://github.com/mrcsxsiq/herdr-tasks-mod.git ~/GitHub/mrcsxsiq/herdr-tasks-mod
-ln -s ~/GitHub/mrcsxsiq/herdr-tasks-mod/mods/checklist ~/.config/herdr-app/mods/checklist
-herdr-app check ~/.config/herdr-app/mods/checklist
+# Clone onde você guarda seus projetos: o link simbólico abaixo aponta para esta pasta.
+git clone https://github.com/mrcsxsiq/herdr-tasks-mod.git
+cd herdr-tasks-mod
+
+# A home do Herdr é ~/.config/herdr-app, a não ser que você defina HERDR_APP_HOME.
+HERDR_HOME="${HERDR_APP_HOME:-$HOME/.config/herdr-app}"
+mkdir -p "$HERDR_HOME/mods"
+ln -s "$PWD/mods/checklist" "$HERDR_HOME/mods/checklist"
+
+herdr-app check "$HERDR_HOME/mods/checklist"
 ```
 
-O link simbólico faz um `git pull` atualizar o mod, e salvar um arquivo recarrega o mod na hora. O mod não usa imagens, então o link é seguro (o Herdr não carrega imagens de uma pasta com link).
+Não mova nem apague a pasta clonada depois, ou o link quebra. O link simbólico faz um `git pull` atualizar o mod, e salvar um arquivo recarrega o mod na hora. O mod não usa imagens, então o link é seguro (o Herdr não carrega imagens de uma pasta com link).
 
-Depois ponha dois blocos no seu layout (`~/.config/herdr-app/layouts/<o seu>.json`). O painel entra na pilha lateral, junto com Files e Changes:
+Depois ponha dois blocos no seu layout (`layouts/<o seu>.json` na home do Herdr, `~/.config/herdr-app` por padrão). O painel entra na pilha lateral, junto com Files e Changes:
 
 ```json
 { "id": "checklist", "type": "block", "content": { "mod": "checklist" } }
@@ -52,7 +59,7 @@ O botão também acrescenta `checklist` a `workspace.panels`, a lista que a barr
 
 ## Os dados
 
-`~/.config/herdr-app/data/checklist/items.json`:
+`data/checklist/items.json` na home do Herdr (`~/.config/herdr-app/data/checklist/items.json` por padrão):
 
 ```json
 {
@@ -77,7 +84,7 @@ O botão também acrescenta `checklist` a `workspace.panels`, a lista que a barr
 
 ## O que o mod acessa
 
-Nada de rede. Lê e grava só `~/.config/herdr-app/data/checklist/`, e roda um único programa, `mkdir -p`, para criar essa pasta.
+Nada de rede. Lê e grava só `data/checklist/` na home do Herdr, e roda um único programa, `mkdir -p`, para criar essa pasta.
 
 ## Desenvolvimento
 

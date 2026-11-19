@@ -19,14 +19,21 @@ A checklist of activities for the [Herdr](https://herdr.dev) desktop app. A **Ch
 You need the Herdr desktop app (tested on 0.1.11). There are no dependencies.
 
 ```sh
-git clone https://github.com/mrcsxsiq/herdr-tasks-mod.git ~/GitHub/mrcsxsiq/herdr-tasks-mod
-ln -s ~/GitHub/mrcsxsiq/herdr-tasks-mod/mods/checklist ~/.config/herdr-app/mods/checklist
-herdr-app check ~/.config/herdr-app/mods/checklist
+# Clone it wherever you keep your projects: the symlink below points at this folder.
+git clone https://github.com/mrcsxsiq/herdr-tasks-mod.git
+cd herdr-tasks-mod
+
+# Herdr's home is ~/.config/herdr-app unless you set HERDR_APP_HOME.
+HERDR_HOME="${HERDR_APP_HOME:-$HOME/.config/herdr-app}"
+mkdir -p "$HERDR_HOME/mods"
+ln -s "$PWD/mods/checklist" "$HERDR_HOME/mods/checklist"
+
+herdr-app check "$HERDR_HOME/mods/checklist"
 ```
 
-The symlink means a `git pull` updates the mod, and saving a file reloads it at once. The mod uses no image files, so the symlink is safe (Herdr does not load images from a symlinked folder).
+Don't move or delete the cloned folder afterwards, or the link breaks. The symlink means a `git pull` updates the mod, and saving a file reloads it at once. The mod uses no image files, so the symlink is safe (Herdr does not load images from a symlinked folder).
 
-Then add two blocks to your layout (`~/.config/herdr-app/layouts/<yours>.json`). The panel goes in the side panel stack, with Files and Changes:
+Then add two blocks to your layout (`layouts/<yours>.json` in Herdr's home, `~/.config/herdr-app` by default). The panel goes in the side panel stack, with Files and Changes:
 
 ```json
 { "id": "checklist", "type": "block", "content": { "mod": "checklist" } }
@@ -52,7 +59,7 @@ The button also adds `checklist` to `workspace.panels`, the list the tab bar use
 
 ## Your data
 
-`~/.config/herdr-app/data/checklist/items.json`:
+`data/checklist/items.json` in Herdr's home (`~/.config/herdr-app/data/checklist/items.json` by default):
 
 ```json
 {
@@ -77,7 +84,7 @@ The button also adds `checklist` to `workspace.panels`, the list the tab bar use
 
 ## What it can access
 
-No network. It reads and writes `~/.config/herdr-app/data/checklist/` only, and runs one program, `mkdir -p`, to create that folder.
+No network. It reads and writes `data/checklist/` in Herdr's home only, and runs one program, `mkdir -p`, to create that folder.
 
 ## Development
 
