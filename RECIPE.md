@@ -1,53 +1,54 @@
 # Checklist
 
-Um checklist de atividades para o Herdr: um painel lateral, aberto por um botão na barra de abas, onde se anota o que fazer e se vai marcando. As atividades são de um espaço ou de todos.
+A checklist of activities for Herdr: a side panel, opened by a button in the tab bar, where you write down what you have to do and tick it off. Activities belong to one space or to all of them.
 
 ![Checklist](preview.png)
 
-## O que se vê
+## What you see
 
-Segue o tema do Herdr. O **botão** fica na linha da barra de abas, depois dos outros botões de painel (Issues, Jira, GitLab): 26 px de altura, caixa de seleção desenhada com um ✓, o texto "Checklist" e, quando o espaço em foco tem atividades abertas, um selo redondo com o número. Fica destacado (`selected`) enquanto o painel do checklist está aberto.
+It follows Herdr's theme. The **button** sits in the tab bar row, after the other panel buttons (Issues, Jira, GitLab): 26 px high, a 14 px box and the text "Checklist". The box shows a ✓ when nothing is left and, when the space in focus has open activities, their number on the accent colour ("9+" above nine). The count lives in the box, not beside the label, so the button keeps one width. It is highlighted (`selected`) while the checklist panel is open.
 
-O **painel** vive na pilha do painel lateral, junto com Files e Changes, no fundo `surface`:
+The **panel** lives in the side panel stack, with Files and Changes, on the `surface` background:
 
-1. Cabeçalho de 38 px: "Checklist" em semibold, o nome do espaço em foco (ou "all spaces") discreto, e à direita dois segmentos, "This space" e "All".
-2. Um campo de texto de 32 px, "Add an activity and press Enter".
-3. Três segmentos de filtro com contagem: "All n", "Open n", "Done n".
-4. A lista, com rolagem. Cada linha tem uma caixa de 16 px, o texto (quebra em várias linhas) e um × discreto à direita. Feita: caixa preenchida com a cor de destaque e ✓, texto riscado e apagado. Em "All", o nome do espaço aparece pequeno embaixo do texto. Lista vazia mostra uma frase curta.
-5. Rodapé com "n open · n done" e, havendo feitas, "Clear done".
+1. A 38 px header: "Checklist" in semibold, the name of the space in focus (or "all spaces") in a muted colour, and two segments on the right, "This space" and "All".
+2. A 32 px text field, "Add an activity and press Enter".
+3. Three filter segments with a count: "All n", "Open n", "Done n".
+4. The list, scrollable. Each row has a 16 px box, the text (it wraps onto several lines) and a muted × on the right. Done: the box is filled with the accent colour and a ✓, the text is struck through and dimmed. In "All", the space's name shows small under the text. An empty list shows one short sentence.
+5. A footer with "n open · n done" and, when there are done activities, "Clear done".
 
-## Como se comporta
+## How it behaves
 
-- Enter no campo adiciona a atividade ao **espaço em foco**, limpa o campo e, se o filtro era "Done", volta para "All". Espaços em branco sobram, o texto tem no máximo 500 caracteres e texto vazio não faz nada.
-- Clicar na caixa ou no texto alterna feita/aberta; o × apaga.
-- Abertas primeiro, da mais antiga para a mais nova; depois as feitas, da mais recente para a mais antiga.
-- "This space" filtra pelo espaço em foco; "All" mostra tudo. A escolha é lembrada (`localStorage`).
-- "Clear done" pede um segundo clique ("Clear n done? Click again"); qualquer outra ação cancela. Com "This space" apaga só as feitas daquele espaço.
-- Um espaço é identificado por `máquina|pasta`, não pelo nome: renomear não separa as atividades.
+- Enter in the field adds the activity to the **space in focus**, clears the field and, if the filter was "Done", switches it back to "All". Extra whitespace is collapsed, the text is at most 500 characters long, and empty text does nothing.
+- Clicking the box or the text toggles done/open; the × deletes.
+- Open activities first, oldest to newest; then the done ones, latest to oldest.
+- "This space" filters by the space in focus; "All" shows everything. The choice is remembered (`localStorage`).
+- "Clear done" asks for a second click ("Clear n done? Click again"); any other action cancels it. With "This space" it deletes only that space's done activities.
+- A space is identified by `machine|folder`, not by its name: renaming it does not split its activities.
 
-## Feito com
+## Built from
 
-`mods/checklist/` com `main.js` (interface, GPUI), `store.js` (dados e regras, sem importar nada do Herdr) e `mod.json` com `{ "place": "none" }`, para o Herdr não acoplar o mod sozinho. O mesmo mod serve o painel e o botão (`props.view === "button"`). Nada de imagens: a caixa e o ✓ são `div` e texto.
+`mods/checklist/` with `main.js` (the interface, GPUI), `store.js` (the data and its rules, importing nothing from Herdr) and `mod.json` with `{ "place": "none" }`, so Herdr does not dock the mod on its own. The same mod serves the panel and the button (`props.view === "button"`). No images: the box and the ✓ are a `div` and text.
 
-Os dados ficam em `appHome()/data/checklist/items.json`, `{ "version": 1, "items": [{ id, text, done, space: { key, name }, createdAt, doneAt }] }`. Cada cópia do mod faz `mkdir -p` da pasta, lê o arquivo e fica em `for (;;) { await watchFolder(dir); recarrega; }`, então painel e botão acompanham qualquer mudança, até uma feita à mão.
+The data lives in `appHome()/data/checklist/items.json`, `{ "version": 1, "items": [{ id, text, done, space: { key, name }, createdAt, doneAt }] }`. Each copy of the mod runs `mkdir -p` on the folder, reads the file and then sits in `for (;;) { await watchFolder(dir); reload; }`, so the panel and the button follow every change, even one made by hand.
 
-Toda mudança é "ler agora, aplicar, gravar só se o arquivo não mudou" (`writeTextFile(path, texto, esperado)`), com até 4 tentativas sobre o conteúdo novo. Um arquivo que não é JSON válido **nunca** é sobrescrito: o painel mostra o erro.
+Every change is "read now, apply, write only if the file has not changed" (`writeTextFile(path, text, expected)`), with up to 4 attempts on the new content. A file that is not valid JSON is **never** overwritten: the panel shows the error.
 
-O botão registra `checklist` na lista compartilhada `workspace.panels` (a barra de abas só reabre, por espaço, painéis que estão nela), e só faz isso quando o bloco `checklist` já está na pilha do layout.
+The button adds `checklist` to the shared `workspace.panels` list (the tab bar only reopens, per space, panels that are in it), and it does so only when the `checklist` block is already in the layout's stack.
 
-Layout: o bloco `checklist` na pilha `panel-body` e o bloco `checklist-button` (132 px) na linha `tab-bar`, com `props: { view: "button" }`.
+Layout: the `checklist` block in the `panel-body` stack, and the `checklist-button` block (100 px) in the `tab-bar` row, with `props: { view: "button" }`.
 
-## Cuidados
+## Watch out
 
-- `herdr-app check` renderiza o mod sem props e com o estado compartilhado de verdade. Nada no `init` pode gravar estado compartilhado sem conferir antes que as props e o layout existem.
-- Salvar um arquivo recarrega as cópias no lugar, **sem** repetir o `init`. Quem precisa de um `init` novo precisa que o bloco saia do layout e volte.
-- O estado compartilhado (`shared.json`) é gravado com atraso: ler logo depois de `setShared` pode mostrar o valor velho.
-- Não use `tasks.*` como prefixo de estado: sobraram chaves de outro mod com esse nome.
-- Mods com `"place"` diferente de `"none"` são acoplados ao layout da tela na primeira vez que o Herdr vê a pasta.
+- `herdr-app check` renders the mod with no props and with the real shared state, so the panel view must never write shared state. Only the button view registers the panel in `workspace.panels`, once, in `init`, and it must not wait to see the panel block in the layout: at `init` that snapshot can be one block behind, and the registration was silently skipped.
+- A panel that is missing from `workspace.panels` is closed whenever you switch spaces; one that is in it is restored, open or closed, as you left it in each space.
+- Saving a file reloads the copies in place **without** running `init` again. To get a fresh `init`, take the block out of the layout and put it back.
+- The shared state (`shared.json`) is written with a delay: reading right after `setShared` can show the old value.
+- Do not use `tasks.*` as a state prefix: keys from another mod with that name were left behind.
+- Mods whose `"place"` is anything but `"none"` are docked into the layout on screen the first time Herdr sees the folder.
 
-## Pronto quando
+## Done when
 
-- `npm test` passa: abrir, marcar, apagar, "Clear done", contagens, ordem e filtros, o `parse` rejeitando JSON quebrado, e a gravação que refaz sobre o conteúdo novo quando o arquivo mudou no meio.
-- `herdr-app check mods/checklist` passa e `herdr-app status` não mostra erro.
-- Com atividades de exemplo no arquivo, o painel mostra riscado, filtros, contagens e rodapé, e o botão mostra o número de abertas do espaço em foco.
-- Mudar o arquivo por fora atualiza o painel e o botão sem recarregar nada.
+- `npm test` passes: adding, ticking, deleting, "Clear done", counts, order and filters, `parse` rejecting broken JSON, and the write that redoes the change on the new content when the file changed in the meantime.
+- `herdr-app check mods/checklist` passes and `herdr-app status` shows no error.
+- With sample activities in the file, the panel shows the strike-through, the filters, the counts and the footer, and the button shows the number of open activities of the space in focus.
+- Changing the file from outside updates the panel and the button without reloading anything.

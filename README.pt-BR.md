@@ -9,7 +9,7 @@ Um checklist de atividades para o app desktop do [Herdr](https://herdr.dev). Um 
 - **Por espaço ou geral.** "This space" mostra as atividades do espaço em que você está (a pasta e a máquina dele). "All" mostra as de todos os espaços, cada uma com o nome do espaço embaixo. Uma atividade nova entra sempre no espaço em foco.
 - **Marcar é um clique**, na caixa ou no texto. As abertas ficam em cima (a mais antiga primeiro) e as feitas embaixo, riscadas.
 - **Filtros** All, Open e Done, cada um com a contagem, e **Clear done**, que pede um segundo clique antes de apagar.
-- **O botão conta** as atividades abertas do espaço em foco.
+- **O botão conta por você.** A caixa dele vira o número de atividades abertas do espaço em foco, e volta a ser um ✓ quando não sobra nenhuma.
 - **Os dados são um arquivo simples** que você pode ler, editar e copiar. Todas as cópias do mod (o painel e o botão) acompanham mudanças nele sozinhas, inclusive as que você faz à mão.
 
 ![A barra de abas: Issues, Jira, GitLab e o botão Checklist com o contador](docs/button.png)
@@ -35,7 +35,7 @@ Depois ponha dois blocos no seu layout (`~/.config/herdr-app/layouts/<o seu>.jso
 E o botão entra na linha da barra de abas, depois das abas:
 
 ```json
-{ "id": "checklist-button", "type": "block", "size": { "px": 132 }, "window_drag": true,
+{ "id": "checklist-button", "type": "block", "size": { "px": 100 }, "window_drag": true,
   "content": { "mod": "checklist", "props": { "view": "button" } } }
 ```
 
@@ -44,7 +44,7 @@ Se a barra de abas do seu layout ainda for um bloco só (`"id": "tabs"`), transf
 ```json
 { "id": "tab-bar", "type": "row", "size": { "px": 42 }, "resizable": false, "children": [
   { "id": "tabs", "type": "block", "window_drag": true, "content": { "mod": "tabs" } },
-  { "id": "checklist-button", "type": "block", "size": { "px": 132 }, "window_drag": true,
+  { "id": "checklist-button", "type": "block", "size": { "px": 100 }, "window_drag": true,
     "content": { "mod": "checklist", "props": { "view": "button" } } } ] }
 ```
 
@@ -89,7 +89,7 @@ herdr-app check mods/checklist
 - `mods/checklist/store.js` tem os dados e as regras (`add`, `toggle`, `remove`, `clearDone`, `counts`, `view`) e a gravação com nova tentativa (`mutate`). Não importa nada do Herdr, e é o que `test/store.test.js` cobre.
 - `mods/checklist/main.js` é a interface: o painel e a view do botão (`props.view === "button"`).
 - Todo texto que aparece na tela está no objeto `TEXT`, no topo do `main.js`, então traduzir a interface é mexer num lugar só.
-- `RECIPE.md` descreve o mod inteiro, para refazer ou mudar com um agente.
+- `RECIPE.md` descreve o mod inteiro, para refazer ou mudar com um agente (em inglês).
 
 ## O que foi e o que não foi testado
 

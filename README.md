@@ -9,7 +9,7 @@ A checklist of activities for the [Herdr](https://herdr.dev) desktop app. A **Ch
 - **Per space, or everywhere.** "This space" shows the activities of the space you are in (its folder and machine). "All" shows every space's activities, each one with its space's name underneath. A new activity always goes to the space in focus.
 - **One click to tick.** Click the box or the text. Open activities stay on top, oldest first; done ones go below, struck through.
 - **Filters** All, Open and Done, each with its count, and **Clear done**, which asks for a second click before it deletes anything.
-- **The button counts** the open activities of the space in focus.
+- **The button counts for you.** Its check box turns into the number of open activities of the space in focus, and goes back to a ✓ when nothing is left.
 - **Your data is a plain file** you can read, edit and copy. Every copy of the mod (the panel, the button) follows changes to it on its own, including ones you make by hand.
 
 ![The tab bar: Issues, Jira, GitLab and the Checklist button with its count](docs/button.png)
@@ -35,7 +35,7 @@ Then add two blocks to your layout (`~/.config/herdr-app/layouts/<yours>.json`).
 And the button goes in the tab bar row, after the tabs:
 
 ```json
-{ "id": "checklist-button", "type": "block", "size": { "px": 132 }, "window_drag": true,
+{ "id": "checklist-button", "type": "block", "size": { "px": 100 }, "window_drag": true,
   "content": { "mod": "checklist", "props": { "view": "button" } } }
 ```
 
@@ -44,7 +44,7 @@ If your layout's tab bar is still a single block (`"id": "tabs"`), turn it into 
 ```json
 { "id": "tab-bar", "type": "row", "size": { "px": 42 }, "resizable": false, "children": [
   { "id": "tabs", "type": "block", "window_drag": true, "content": { "mod": "tabs" } },
-  { "id": "checklist-button", "type": "block", "size": { "px": 132 }, "window_drag": true,
+  { "id": "checklist-button", "type": "block", "size": { "px": 100 }, "window_drag": true,
     "content": { "mod": "checklist", "props": { "view": "button" } } } ] }
 ```
 
@@ -89,7 +89,7 @@ herdr-app check mods/checklist
 - `mods/checklist/store.js` holds the data and its rules (`add`, `toggle`, `remove`, `clearDone`, `counts`, `view`) and the write with retry (`mutate`). It imports nothing from Herdr, and it is what `test/store.test.js` covers.
 - `mods/checklist/main.js` is the interface: the panel and the button view (`props.view === "button"`).
 - Every word on screen is in the `TEXT` object at the top of `main.js`, so translating the interface is a one-place edit.
-- `RECIPE.md` describes the whole mod, to rebuild or change it with an agent (in Portuguese).
+- `RECIPE.md` describes the whole mod, to rebuild or change it with an agent.
 
 ## What is and is not tested
 

@@ -98,13 +98,13 @@ export default class Checklist extends View {
     });
   }
 
-  // Herdr's tab bar restores each space's panel only from the "workspace.panels" list, so the panel
-  // has to be in it. Only the button does this, and only once the layout and props are there (not
-  // in `herdr-app check`, which has neither), so it can never wipe the list.
+  // Herdr's tab bar remembers, per space, whether a panel was open or closed, but only for panels in
+  // the "workspace.panels" list: leave this one out and switching spaces closes it. Only the button
+  // view does this (never the panel view, which is what `herdr-app check` renders), once, in init.
+  // It must not wait to see the panel block in the layout: at init that snapshot can be one block
+  // behind, and the registration was silently skipped.
   register() {
     try {
-      const inStack = (find(layout(), "panel-body")?.children ?? []).map((c) => c.id);
-      if (!inStack.includes(PANEL)) return;
       const list = shared("workspace.panels") ?? ["files", "changes"];
       if (!list.includes(PANEL)) setShared("workspace.panels", [...list, PANEL]);
     } catch {}
@@ -305,6 +305,8 @@ export default class Checklist extends View {
             }
           })
           .child(
+            // The box is the badge: a check mark when nothing is left, the number of open activities
+            // otherwise. A badge beside the label would make the button wider when it shows.
             div()
               .size(14)
               .flex_none()
@@ -313,25 +315,12 @@ export default class Checklist extends View {
               .items_center()
               .justify_center()
               .border(1)
-              .border_color(on ? t.foreground : t.muted)
-              .text_size(10)
-              .child("✓"),
+              .border_color(open > 0 ? t.accent : on ? t.foreground : t.muted)
+              .when(open > 0, (e) => e.bg(t.accent).text_color(t.background).font_semibold())
+              .text_size(open > 9 ? 8 : 10)
+              .child(open > 9 ? "9+" : open > 0 ? String(open) : "✓"),
           )
-          .child(TEXT.title)
-          .when(open > 0, (e) =>
-            e.child(
-              div()
-                .h(16)
-                .px(5)
-                .rounded(8)
-                .flex()
-                .items_center()
-                .text_size(10)
-                .bg(t.accent)
-                .text_color(t.background)
-                .child(String(open)),
-            ),
-          ),
+          .child(TEXT.title),
       );
   }
 
